@@ -3,9 +3,8 @@ configfile: "config.json"
 SAMPLES, = glob_wildcards(config['haplohiv_folder']+"ec/{id}.fastq")
 
 rule all:
-    input:  
-        expand("{prefix}/mapped/{samples}.sam", prefix=config['output_dir'], samples=SAMPLES)        
-#        expand("{prefix}/haplotypes/{samples}_haplotypes.fa", prefix=config['output_dir'], samples="SAMPLES")
+    input:        
+        expand("{prefix}/haplotypes/{samples}_haplotypes.fa", prefix=config['output_dir'], samples=SAMPLES)
 
 rule map_to_consensus:
     input:
@@ -20,17 +19,18 @@ rule map_to_consensus:
 
 rule configure_predicthaplo:
     input:
-        dummy = "PredictHaplo_dummy.conf",
-        sample = "{prefix}/mapped/{samples}.sam"
+        dummy = config['output_dir']+"/PredictHaplo.conf",
+        sample = "{prefix}/mapped/{samples}.sam",
+        true_haplotypes = "{prefix}/consensus/masterconsensus_"+config['patient']+"_aligned.fa"
     output:
         "{prefix}/predicthaplo/{samples}.conf"
     shell:
         """
         cp {input.dummy} {output}
         sed -i "s|prefix_line|{config[output_dir]}/predicthaplo/output_{wildcards.samples}/{wildcards.samples}|" {output}
-        name=`grep {wildcards.samples} {config[table]} | awk '{{print $3}}'`
-        sed -i "s|reference_line|{config[output_dir]}/consensus/${{name::-1}}_consensus.fa|" {output}
+        sed -i "s|reference_line|{config[output_dir]}/consensus/masterconsensus_{config[patient]}_consensus.fa|" {output}
         sed -i "s|reads_line|{input.sample}|" {output}
+        sed -i "s|true_haplotypes_line|{input.true_haplotypes}|" {output}
         """
 
 rule predicthaplo:
