@@ -1,0 +1,6 @@
+{
+    "haplohiv_folder": "/hpc/.../haplohiv_out",
+    "output_dir": "output",
+    "patient": "1",
+    "mastertable": "mastertable.tsv"
+}
