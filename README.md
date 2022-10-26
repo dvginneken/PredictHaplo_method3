@@ -8,6 +8,9 @@ Create and activate the conda environment:
 `conda activate haplotyping`  
 
 Run the script:  
-`bash script.sh [output directory] [directory HaploHIV]`
+`bash script.sh [output directory] [directory HaploHIV]`  
+
+Run this script for each patient separately:
+
 
 [1] Prabhakharan S, Rey M, Zagordi O, et al. HIV Haplotype Inference Using a Propagating Dirichlet Process Mixture Model. IEEE/ACM. 2014;11(1):182-191. doi: 10.1109/TCBB.2013.145
