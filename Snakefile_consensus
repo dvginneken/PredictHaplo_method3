@@ -4,6 +4,7 @@ configfile: "config.json"
 
 PATIENTS, = glob_wildcards(config['haplohiv_folder']+"haplohiv{id,\d?}")
 
+#Retrieve all sample consensus files for each patient
 def get_haplohivfiles(wildcards):
     patient = wildcards.patient
     prefix = config['haplohiv_folder']
@@ -13,6 +14,7 @@ rule all:
     input:
         expand("{prefix}/patient{patient}/consensus/masterconsensus_{patient}_consensus.fa", prefix=config['output_dir'], patient=PATIENTS)
 
+#Concatenatie sample consensus sequences and change sequence names
 rule concatenate:
     input:
         get_haplohivfiles
@@ -33,6 +35,7 @@ rule concatenate:
         cat * > {output}
         """ 
 
+#Dealign sequences
 rule dealign:
     input:
         "{prefix}/patient{patient}/consensus/masterconsensus_{patient}_concat.fa"
@@ -41,6 +44,7 @@ rule dealign:
     shell:
         "seqkit seq -g {input} > {output}" 
 
+#Align sequences
 rule align:
     input:
         "{prefix}/patient{patient}/consensus/masterconsensus_{patient}_dealigned.fa"
@@ -49,6 +53,7 @@ rule align:
     shell:
         "mafft --globalpair --maxiterate 500 {input} > {output}"
 
+#Create a masterconsensus out of all sample consensus sequences
 rule consensus:
     input:
         "{prefix}/patient{patient}/consensus/masterconsensus_{patient}_aligned.fa"
