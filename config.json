@@ -1,5 +1,5 @@
 {
     "haplohiv_folder": "/hpc/dla_lti/dvanginneken/HaploHIV_Daphne/",
-    "output_dir": "/hpc/dla_lti/dvanginneken/TrueHaplotypes",
-    "mastertable": "/hpc/dla_lti/dvanginneken/MergedTimepoints_PredictHaplo/Mastertable_timepoints.tsv"
+    "output_dir": "output",
+    "mastertable": "mastertable.tsv"
 }
